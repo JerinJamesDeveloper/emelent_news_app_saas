@@ -11,8 +11,9 @@ const generateOtp = () =>
 
 export const signup = async (req, res) => {
   try {
-    const { username, email, password, phone } = req.body;
-
+    const { first_name, email, password } = req.body;
+    const username = first_name;
+    const phone = "952234728";
     if (!username || !email || !password || !phone) {
       return res.status(400).json({ message: "All fields are required" });
     }

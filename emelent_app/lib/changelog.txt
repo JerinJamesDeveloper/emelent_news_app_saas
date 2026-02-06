@@ -1,0 +1,66 @@
+├── core/
+│   ├── constants/
+│   │   ├── app_constants.dart          ✅
+│   │   ├── api_endpoints.dart          ✅
+│   │   └── storage_keys.dart           ✅
+│   ├── errors/
+│   │   ├── failures.dart               ✅
+│   │   └── exceptions.dart             ✅
+│   ├── network/
+│   │   ├── dio_client.dart             ✅
+│   │   ├── api_interceptor.dart        ✅
+│   │   └── network_info.dart           ✅
+│   ├── storage/
+│   │   └── local_storage.dart          ✅
+│   ├── theme/
+│   │   ├── app_theme.dart              ✅
+│   │   ├── app_colors.dart             ✅
+│   │   └── app_text_styles.dart        ✅
+│   ├── utils/
+│   │   ├── validators.dart             ✅
+│   │   └── extensions.dart             ✅
+│   └── di/
+│       └── injection_container.dart    ✅
+│
+
+
+======================================= PHASE 1 FILES ==============================
+1. core/constants/app_constants.dart
+2. core/constants/api_endpoints.dart  
+3. core/constants/storage_keys.dart
+4. core/errors/exceptions.dart
+5. core/errors/failures.dart
+6. core/theme/app_colors.dart
+7. core/theme/app_text_styles.dart
+8. core/theme/app_theme.dart
+9. core/utils/validators.dart
+10. core/utils/extensions.dart
+11. core/storage/local_storage.dart
+12. core/network/network_info.dart
+13. core/network/api_interceptor.dart
+14. core/network/dio_client.dart
+
+====================================== PHASE 2 FILES ==============================
+15. shared/widgets/loading_widget.dart
+16. shared/widgets/error_widget.dart
+17. shared/widgets/app_button.dart
+18. shared/widgets/app_text_field.dart
+
+====================================== PHASE 3 FILES ==============================
+19. features/auth/domain/entities/user_entity.dart
+20. features/auth/domain/repositories/auth_repository.dart
+21. features/auth/domain/usecases/login_usecase.dart
+22. features/auth/domain/usecases/register_usecase.dart
+23. features/auth/domain/usecases/logout_usecase.dart
+24. features/auth/domain/usecases/get_current_user_usecase.dart
+
+    ├── usecase.dart                  ✅ (base class)
+    ├── login_usecase.dart            ✅
+    ├── register_usecase.dart         ✅
+    ├── logout_usecase.dart           ✅
+    ├── get_current_user_usecase.dart ✅
+    ├── check_auth_status_usecase.dart ✅
+    ├── forgot_password_usecase.dart  ✅
+    ├── reset_password_usecase.dart   ✅
+    ├── change_password_usecase.dart  ✅
+    └── auth_state_changes_usecase.dart ✅

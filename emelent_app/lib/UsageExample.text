@@ -1,0 +1,96 @@
+// Primary button with loading
+AppButton(
+  text: 'Submit',
+  isLoading: isLoading,
+  onPressed: () => handleSubmit(),
+);
+
+// Outlined button
+AppButton(
+  text: 'Cancel',
+  variant: AppButtonVariant.outlined,
+  onPressed: () => Navigator.pop(context),
+);
+
+// Danger button
+AppButton(
+  text: 'Delete Account',
+  variant: AppButtonVariant.danger,
+  leadingIcon: Icons.delete,
+  onPressed: () => showDeleteDialog(),
+);
+Text Fields:
+dart
+
+// Email field
+EmailTextField(
+  controller: emailController,
+  validator: Validators.email,
+  onChanged: (value) => validateForm(),
+);
+
+// Password field
+PasswordTextField(
+  controller: passwordController,
+  validator: Validators.password,
+);
+
+// Search field
+SearchTextField(
+  controller: searchController,
+  onChanged: (query) => searchItems(query),
+);
+Error/Loading:
+dart
+
+// Loading overlay
+LoadingOverlay(
+  isLoading: isLoading,
+  message: 'Please wait...',
+  child: YourContent(),
+);
+
+// Empty state
+EmptyStateWidget(
+  title: 'No Items Found',
+  message: 'Start by adding your first item.',
+  icon: Icons.inbox,
+  actionText: 'Add Item',
+  onAction: () => navigateToAddItem(),
+);
+
+
+Key Design Decisions
+1. Either Type (from dartz)
+All use cases return Either<Failure, Success> which forces explicit error handling:
+
+dart
+
+final result = await loginUseCase(params);
+result.fold(
+  (failure) => handleError(failure),
+  (session) => handleSuccess(session),
+);
+2. Validation in Use Cases
+Business validation happens in use cases, not in UI or repository:
+
+dart
+
+// Use case validates before calling repository
+final emailError = Validators.email(params.email);
+if (emailError != null) {
+  return Left(ValidationFailure(...));
+}
+3. Equatable Params
+All parameter classes extend Equatable for easy comparison and testing:
+
+dart
+
+class LoginParams extends Equatable {
+  @override
+  List<Object?> get props => [email, password];
+}
+4. Separation of Concerns
+Entity: Pure data, no dependencies
+Repository: Contract only, no implementation
+Use Case: Single responsibility, one action
