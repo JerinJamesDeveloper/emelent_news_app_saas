@@ -15,6 +15,7 @@ import '../features/auth/presentation/pages/forgot_password_page.dart';
 import '../features/auth/presentation/pages/login_page.dart';
 import '../features/auth/presentation/pages/register_page.dart';
 import '../features/auth/presentation/pages/splash_page.dart';
+import '../features/home/presentation/pages/home_page.dart';
 import 'role_based_navigator.dart';
 import 'route_guards.dart';
 import 'route_names.dart';
@@ -89,8 +90,8 @@ class AppRouter {
               path: RoutePaths.home,
               name: RouteNames.home,
               pageBuilder: (context, state) => NoTransitionPage(
-                child: _buildPlaceholderPage('Home', Icons.home),
-                // child: const UserHomePage(),
+                // child: _buildPlaceholderPage('Home', Icons.home),
+                child: const HomePage(),
               ),
             ),
             // NotificationsS

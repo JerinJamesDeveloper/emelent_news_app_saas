@@ -57,4 +57,11 @@ static const String baseurl = AppConstants.baseUrl;
   // ============== COMMON ==============
   static const String health = '/health';
   static const String version = '/version';
+// ================= Home ============================
+static const String homeBase = '$baseurl/homes';
+static const String gethomes = '$homeBase/get';
+static const String getallhomes = '$homeBase/getall';
+static const String createhomes = '$homeBase/create';
+static const String deletehomes = '$homeBase/delete';
+static const String updatehomes = '$homeBase/update';
 }

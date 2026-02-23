@@ -34,6 +34,18 @@ import '../../features/profile/domain/repositories/profile_repository.dart';
 import '../../features/profile/domain/usecases/get_profile_usecase.dart';
 import '../../features/profile/domain/usecases/update_profile_usecase.dart';
 import '../../features/profile/presentation/bloc/profile_bloc.dart';
+// Home Feature
+import '../../features/home/data/datasources/home_local_datasource.dart';
+import '../../features/home/data/datasources/home_remote_datasource.dart';
+import '../../features/home/data/repositories/home_repository_impl.dart';
+import '../../features/home/domain/repositories/home_repository.dart';
+import '../../features/home/domain/usecases/create_home_usecase.dart';
+import '../../features/home/domain/usecases/delete_home_usecase.dart';
+import '../../features/home/domain/usecases/get_home_usecase.dart';
+import '../../features/home/domain/usecases/get_all_homes_usecase.dart';
+import '../../features/home/domain/usecases/update_home_usecase.dart';
+import '../../features/home/presentation/bloc/home_bloc.dart';
+
 
 /// Global service locator instance
 final sl = GetIt.instance;
@@ -58,6 +70,8 @@ Future<void> initDependencies() async {
   // ==================== FEATURES ====================
   _initAuthFeature();
   _initProfileFeature();
+
+  _initHomeFeature();
 }
 
 /// Initialize external dependencies
@@ -248,3 +262,59 @@ mixin ServiceLocatorMixin {
 }
 
 // ==================== END OF FEATURE ====================
+
+
+/// Initialize Home feature
+void _initHomeFeature() {
+  // ========== BLoC ==========
+  sl.registerFactory<HomeBloc>(
+    () => HomeBloc(
+      getHomeUseCase: sl(),
+      getAllHomesUseCase: sl(),
+      createHomeUseCase: sl(),
+      updateHomeUseCase: sl(),
+      deleteHomeUseCase: sl(),
+    ),
+  );
+
+  // ========== Use Cases ==========
+  sl.registerLazySingleton<GetHomeUseCase>(
+    () => GetHomeUseCase(sl()),
+  );
+
+  sl.registerLazySingleton<GetAllHomesUseCase>(
+    () => GetAllHomesUseCase(sl()),
+  );
+
+  sl.registerLazySingleton<CreateHomeUseCase>(
+    () => CreateHomeUseCase(sl()),
+  );
+
+  sl.registerLazySingleton<UpdateHomeUseCase>(
+    () => UpdateHomeUseCase(sl()),
+  );
+
+  sl.registerLazySingleton<DeleteHomeUseCase>(
+    () => DeleteHomeUseCase(sl()),
+  );
+
+  // ========== Repository ==========
+  sl.registerLazySingleton<HomeRepository>(
+    () => HomeRepositoryImpl(
+      remoteDataSource: sl(),
+      localDataSource: sl(),
+      networkInfo: sl(),
+    ),
+  );
+
+  // ========== Data Sources ==========
+  sl.registerLazySingleton<HomeRemoteDataSource>(
+    () => HomeRemoteDataSourceImpl(sl()),
+  );
+
+  sl.registerLazySingleton<HomeLocalDataSource>(
+    () => HomeLocalDataSourceImpl(sl()),
+  );
+}
+
+// ==================== END OF Home FEATURE ====================
