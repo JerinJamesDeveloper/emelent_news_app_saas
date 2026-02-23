@@ -12,10 +12,10 @@ class ApiEndpoints {
 
 static const String baseurl = AppConstants.baseUrl;
   // ============== AUTH ENDPOINTS ==============
-  static const String _authBase = '$baseurl/api';
+  static const String _authBase = '$baseurl/auth';
   
   static const String login = '$_authBase/login';
-  static const String register = '$_authBase/register';
+  static const String register = '$_authBase/signup';
   static const String logout = '$_authBase/logout';
   static const String refreshToken = '$_authBase/refresh-token';
   static const String forgotPassword = '$_authBase/forgot-password';

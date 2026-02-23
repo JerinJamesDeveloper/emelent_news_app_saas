@@ -5,7 +5,16 @@ import { db } from "../config/db.js";
 /* -------------------------------- UTIL -------------------------------- */
 
 const generateOtp = () =>
-  Math.floor(100000 + Math.random() * 900000).toString();
+  Math.floor(1000 + Math.random() * 9000).toString();
+
+const generateRandomPhoneNumber = () => {
+  // Generate a random 10-digit number
+  // First digit should be between 6-9 (typical mobile number starting digits)
+  const firstDigit = Math.floor(Math.random() * 4) + 6; // Generates 6,7,8, or 9
+  const remainingDigits = Math.floor(Math.random() * 1000000000).toString().padStart(9, '0');
+  return `${firstDigit}${remainingDigits}`;
+};
+
 
 /* ------------------------------- SIGNUP -------------------------------- */
 
@@ -13,7 +22,7 @@ export const signup = async (req, res) => {
   try {
     const { first_name, email, password } = req.body;
     const username = first_name;
-    const phone = "952234728";
+    const phone = generateRandomPhoneNumber();
     if (!username || !email || !password || !phone) {
       return res.status(400).json({ message: "All fields are required" });
     }
@@ -42,16 +51,16 @@ export const signup = async (req, res) => {
     const otp = generateOtp();
 
     // Store OTP (5 min expiry)
-    try{
-          await db.query(
-      `INSERT INTO otp_verifications (user_id, otp, expires_at)
+    try {
+      await db.query(
+        `INSERT INTO otp_verifications (user_id, otp, expires_at)
        VALUES (?, ?, NOW() + INTERVAL 5 MINUTE)`,
-      [result.insertId, otp]
-    );
+        [result.insertId, otp]
+      );
     }
-  catch(e){
-    console.log("otp not added in db");
-  }
+    catch (e) {
+      console.log("otp not added in db");
+    }
 
     // TODO: Integrate SMS provider
     console.log("OTP for", phone, ":", otp);
@@ -69,15 +78,15 @@ export const signup = async (req, res) => {
 
 export const verifyOtp = async (req, res) => {
   try {
-    const { phone, otp } = req.body;
+    const { email, otp } = req.body;
 
-    if (!phone || !otp) {
-      return res.status(400).json({ message: "Phone and OTP required" });
+    if (!email || !otp) {
+      return res.status(400).json({ message: "OTP required" });
     }
 
     const [[user]] = await db.query(
-      "SELECT id, role FROM users WHERE phone=?",
-      [phone]
+      "SELECT * FROM users WHERE email=?",
+      [email]
     );
 
     if (!user) {
@@ -106,18 +115,56 @@ export const verifyOtp = async (req, res) => {
       [user.id]
     );
 
-    const token = jwt.sign(
+    const accessToken  = jwt.sign(
       { id: user.id, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 
-    res.json({ token });
+    res.json({ data: { user, tokens : { accessToken } } });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "OTP verification failed" });
   }
 };
+
+
+/*------------------------------- RESEND OTP -----------------------------*/
+
+export const resendOtp = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const [[user]] = await db.query(
+      "SELECT * FROM users WHERE email=?",
+      [email]
+    );
+
+    await db.query(
+      "DELETE FROM otp_verifications WHERE user_id=?",
+      [user.id]
+    );
+
+    const otp = generateOtp();
+
+    // Store OTP (5 min expiry)
+    try {
+      await db.query(
+        `INSERT INTO otp_verifications (user_id, otp, expires_at)
+       VALUES (?, ?, NOW() + INTERVAL 5 MINUTE)`,
+        [user.id, otp]
+      );
+    }
+    catch (e) {
+      console.log("otp not added in db");
+    }
+
+    // TODO: Integrate SMS provider
+    console.log("OTP for", email, ":", otp);
+  }
+  catch(err){
+     res.status(500).json({ message: "OTP Resend failed" });
+  }
+}
 
 /* -------------------------------- LOGIN -------------------------------- */
 
@@ -145,13 +192,13 @@ export const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const token = jwt.sign(
+    const accessToken = jwt.sign(
       { id: user.id, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 
-    res.json({ token });
+    res.json({ data: { user , tokens : { accessToken }} });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Login failed" });

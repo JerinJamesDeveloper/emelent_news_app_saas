@@ -9,14 +9,14 @@ class AppConstants {
   AppConstants._();
 
   // ============== APP INFO ==============
-  static const String appName = 'Flutter Starter Kit';
-  static const String appVersion = '1.0.0';
+  static const String appName = 'Emelent News';
+  static const String appVersion = '0.0.1';
   static const String appBuildNumber = '1';
   
   // ============== API CONFIGURATION ==============
   /// Base URL for API calls
   /// Change this based on your environment (dev, staging, prod)
-  static const String baseUrl = 'https://api.yourapp.com/v1';
+  static const String baseUrl = 'http://localhost:5000';
   
   /// Request timeout duration
   static const Duration connectionTimeout = Duration(seconds: 30);

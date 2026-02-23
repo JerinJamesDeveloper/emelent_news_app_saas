@@ -89,8 +89,8 @@ class AppRouter {
               path: RoutePaths.home,
               name: RouteNames.home,
               pageBuilder: (context, state) => NoTransitionPage(
-                // child: _buildPlaceholderPage('Home', Icons.home),
-                child: const UserHomePage(),
+                child: _buildPlaceholderPage('Home', Icons.home),
+                // child: const UserHomePage(),
               ),
             ),
             // NotificationsS
